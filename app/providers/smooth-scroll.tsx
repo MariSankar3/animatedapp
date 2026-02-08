@@ -1,31 +1,37 @@
 "use client";
 
-import { useEffect } from "react";
-import Lenis from "@studio-freight/lenis";
+import { ReactLenis } from "lenis/react";
+import { useEffect, useRef } from "react";
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+import type { LenisRef } from "lenis/react";
 
-export default function LenisProvider({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+gsap.registerPlugin(ScrollTrigger);
+
+export default function SmoothScroll({ children }: { children: React.ReactNode }) {
+  const lenisRef = useRef<LenisRef>(null);
+
   useEffect(() => {
-    const lenis = new Lenis({
-      duration: 1.7,
-      smoothWheel: true,
-    //   lerp: 0.07, // 🧈 butter smooth
-    });
-
-    function raf(time: number) {
-      lenis.raf(time);
-      requestAnimationFrame(raf);
+    function update(time: number) {
+      lenisRef.current?.lenis?.raf(time * 1000);
     }
 
-    requestAnimationFrame(raf);
+    gsap.ticker.add(update);
+    gsap.ticker.lagSmoothing(0);
 
     return () => {
-      lenis.destroy();
+      gsap.ticker.remove(update);
     };
   }, []);
 
-  return <>{children}</>;
+  return (
+    <ReactLenis
+      ref={lenisRef}
+      root
+      autoRaf={false}
+      options={{ lerp: 0.1, duration: 1.5, smoothWheel: true }}
+    >
+      {children}
+    </ReactLenis>
+  );
 }

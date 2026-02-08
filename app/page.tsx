@@ -21,31 +21,10 @@ export default function Home() {
   ];
 
   return (
-    <div className="relative min-h-screen w-full overflow-x-hidden font-sans">
-
-      {/* ================= BACKGROUND VIDEO ================= */}
-      <video
-        className="fixed inset-0 z-0 h-full w-full object-cover"
-        src="/video.mp4"
-        autoPlay
-        loop
-        muted
-        playsInline
-        preload="auto"
-        onPlaying={() => setVideoReady(true)}
-      />
+    <div className="relative min-h-screen w-full bg-[#121212] overflow-x-hidden font-sans">
 
       {/* ================= POSTER OVERLAY ================= */}
-      <div
-        className={`fixed inset-0 z-10 transition-opacity duration-700 ${
-          videoReady ? "opacity-0 pointer-events-none" : "opacity-100"
-        }`}
-        style={{
-          backgroundImage: "url('/video.png')",
-          backgroundSize: "cover",
-          backgroundPosition: "center",
-        }}
-      />
+   
 
       {/* ================= DARK OVERLAY ================= */}
       <div className="fixed inset-0 z-20 bg-black/40" />
